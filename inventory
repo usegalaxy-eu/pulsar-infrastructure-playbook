@@ -1,0 +1,3 @@
+[pulsarservers]
+de01.pulsar.galaxyproject.eu ansible_connection=ssh ansible_user=centos
+de02.pulsar.galaxyproject.eu ansible_connection=ssh ansible_user=centos

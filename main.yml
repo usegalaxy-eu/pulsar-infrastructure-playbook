@@ -1,0 +1,53 @@
+- hosts: pulsarservers
+
+  tasks:
+    - name: Copy job_metrics settings files
+      copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+      with_items:
+        - {src: "job_metrics_conf.xml", dest: "{{ pulsar_root_path }}/config/job_metrics_conf.xml"}
+
+    - name: Copy Pulsar application configuration file
+      template:
+        src: "{{ inventory_hostname }}/app.yml.j2"
+        dest: "{{ pulsar_root_path }}/config/app.yml"
+        force: yes
+
+    - name: Create container image cache path
+      file:
+        path: "{{ pulsar_container_image_cache_path }}"
+        state: directory
+        mode: '0775'
+
+    - name: Copy private ssh keys
+      copy:
+        src: "{{ private_ssh_keys_src_path }}"
+        dest: "{{ private_ssh_keys_src_path }}"
+        mode: 0600
+
+    - name: Copy HTCondor test files
+      copy:
+        src: "{{ item.name }}"
+        dest: "{{ pulsar_data_path }}/{{ item.name }}"
+        mode: "{{ item.mode }}"
+      with_items:
+        - {'name': test.job, 'mode': '0600'}
+        - {'name': test.sh, 'mode': '0700'}
+
+    - name: Apply patch to multiple files under basedir
+      patch:
+        src: "{{ item.src }}"
+        basedir: "{{ item.basedir }}"
+        strip: 1
+        state: "{{ item.state }}"
+        backup: "{{ item.backup }}"
+      loop: "{{ patches_to_apply }}"
+      when: apply_patches | bool
+
+    - name: Ensure pulsar service is enabled, and restart it
+      become: yes
+      service:
+        name: pulsar
+        enabled: yes
+        state: restarted

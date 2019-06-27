@@ -1,0 +1,50 @@
+diff --git a/pulsar/manager_endpoint_util.py b/pulsar/manager_endpoint_util.py
+index 8590270..cd7770a 100644
+--- a/pulsar/manager_endpoint_util.py
++++ b/pulsar/manager_endpoint_util.py
+@@ -13,12 +13,17 @@ from pulsar.managers import PULSAR_UNKNOWN_RETURN_CODE
+ log = logging.getLogger(__name__)
+ 
+ 
++def _get_galaxy_job_id(job_id, sep='-'):
++    return job_id.split('-')[0] if sep in job_id else job_id
++
++
+ def status_dict(manager, job_id):
+     job_status = manager.get_status(job_id)
+     return full_status(manager, job_status, job_id)
+ 
+ 
+ def full_status(manager, job_status, job_id):
++    job_id = _get_galaxy_job_id(job_id)
+     if status.is_job_done(job_status):
+         full_status = __job_complete_dict(job_status, manager, job_id)
+     else:
+@@ -85,9 +90,14 @@ def submit_job(manager, job_config):
+             )
+ 
+         if job_config is not None:
++            job_id = job_config["job_id"]
+             job_directory = job_config["job_directory"]
+             jobs_directory = os.path.abspath(os.path.join(job_directory, os.pardir))
+             command_line = command_line.replace('__PULSAR_JOBS_DIRECTORY__', jobs_directory)
++            command_line = command_line.replace(os.path.join(jobs_directory, _get_galaxy_job_id(job_id)), job_directory)
++            for action in remote_staging['setup']:
++                if 'action' in action.keys() and 'contents' in action['action']:
++                    action['action']['contents'] = action['action']['contents'].replace(os.path.join(jobs_directory, _get_galaxy_job_id(job_id)), job_directory)
+ 
+         # TODO: Handle __PULSAR_JOB_DIRECTORY__ config files, metadata files, etc...
+         manager.touch_outputs(job_id, touch_outputs)
+diff --git a/pulsar/managers/base/__init__.py b/pulsar/managers/base/__init__.py
+index c924fb9..9bf8896 100644
+--- a/pulsar/managers/base/__init__.py
++++ b/pulsar/managers/base/__init__.py
+@@ -36,6 +36,8 @@ JOB_DIRECTORY_TOOL_FILES = "tool_files"
+ DEFAULT_ID_ASSIGNER = "galaxy"
+ 
+ ID_ASSIGNER = {
++    # Generate a random id appending an uuid4 string at the galaxy_job_id
++    'job_plus_uuid': lambda galaxy_job_id: "{}-{}".format(galaxy_job_id, uuid4().hex),
+     # Generate a random id, needed if multiple
+     # Galaxy instances submitting to same Pulsar.
+     'uuid': lambda galaxy_job_id: uuid4().hex,
