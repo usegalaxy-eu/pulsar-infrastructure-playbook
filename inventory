@@ -1,3 +1,6 @@
 [pulsarservers]
 de01.pulsar.galaxyproject.eu ansible_connection=ssh ansible_user=centos
 de02.pulsar.galaxyproject.eu ansible_connection=ssh ansible_user=centos
+it01.pulsar.galaxyproject.eu ansible_connection=ssh ansible_user=centos
+be01.pulsar.galaxyproject.eu ansible_connection=ssh ansible_user=centos ansible_port=59444
+
