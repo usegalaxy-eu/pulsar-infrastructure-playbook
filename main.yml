@@ -34,6 +34,9 @@
       with_items:
         - {'name': test.job, 'mode': '0600'}
         - {'name': test.sh, 'mode': '0700'}
+        - {'name': fio.job, 'mode': '0600'}
+        - {'name': fio.sh, 'mode': '0700'}
+
 
     - name: Apply patch to multiple files under basedir
       patch:
