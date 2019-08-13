@@ -9,29 +9,17 @@
         state: restarted
 
   tasks:
+    - name: import keys task
+      include_tasks: keys.yml
+
     - name: import cron tasks
       include_tasks: cron.yml
 
-    - name: Copy job_metrics settings files
-      copy:
-        src: "{{ item.src }}"
-        dest: "{{ item.dest }}"
-      with_items:
-        - {src: "{{ inventory_hostname }}/job_metrics_conf.xml", dest: "{{ pulsar_root_path }}/config/job_metrics_conf.xml"}
-      notify: restart pulsar
+    - name: import test tasks
+      include_tasks: test.yml
 
-    - name: copy staging_time metrics plugin
-      copy:
-        src: "staging_time.py"
-        dest: "/opt/pulsar/venv/lib/python2.7/site-packages/galaxy/jobs/metrics/instrumenters/staging_time.py"
-      when: inventory_hostname == 'it01.pulsar.galaxyproject.eu'
-
-    - name: Copy Pulsar application configuration file
-      template:
-        src: "{{ inventory_hostname }}/app.yml.j2"
-        dest: "{{ pulsar_root_path }}/config/app.yml"
-        force: yes
-      notify: restart pulsar
+    - name: import metrics tasks
+      include_tasks: metrics.yml
 
     - name: Create container image cache path
       file:
@@ -39,24 +27,12 @@
         state: directory
         mode: '0775'
 
-    - name: Copy private ssh keys
-      copy:
-        src: "{{ private_ssh_keys_src_path }}"
-        dest: "{{ private_ssh_keys_dst_path }}"
-        mode: 0600
-
-    - name: Copy HTCondor test files
-      copy:
-        src: "{{ item.name }}"
-        dest: "{{ pulsar_data_path }}/{{ item.name }}"
-        mode: "{{ item.mode }}"
-      with_items:
-        - {'name': test.job, 'mode': '0600'}
-        - {'name': test.sh, 'mode': '0700'}
-        - {'name': fio.job, 'mode': '0600'}
-        - {'name': fio.sh, 'mode': '0700'}
-        - {'name': iperf.job, 'mode': '0600'}
-        - {'name': iperf.sh, 'mode': '0700'}
+    - name: Copy Pulsar application configuration file
+      template:
+        src: "{{ inventory_hostname }}/app.yml.j2"
+        dest: "{{ pulsar_root_path }}/config/app.yml"
+        force: yes
+      notify: restart pulsar
 
     - name: Apply patch to multiple files under basedir
       patch:

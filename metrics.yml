@@ -1,0 +1,15 @@
+---
+- name: Copy job_metrics settings files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - {src: "{{ inventory_hostname }}/job_metrics_conf.xml", dest: "{{ pulsar_root_path }}/config/job_metrics_conf.xml"}
+  notify: restart pulsar
+
+- name: Copy metrics plugin
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  loop: "{{ plugins_to_copy }}"
+  when: copy_plugins | bool

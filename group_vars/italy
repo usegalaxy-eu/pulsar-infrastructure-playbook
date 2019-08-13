@@ -3,5 +3,6 @@ patches_to_apply:
   - { 'src': 'patches/0005-tool_preparation_time.patch', 'basedir': '/opt/pulsar/venv/lib/python2.7/site-packages', 'state': 'present', 'backup': 'yes' }
   - { 'src': 'patches/preprocessing_time-as-metadata.patch', 'basedir': '/opt/pulsar/venv/lib/python2.7/site-packages', 'state': 'present', 'backup': 'yes' }
 
-
-
+copy_plugins: true
+plugins_to_copy:
+  - {'src': 'staging_time.py', 'dest': '/opt/pulsar/venv/lib/python2.7/site-packages/galaxy/jobs/metrics/instrumenters/staging_time.py'}

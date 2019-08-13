@@ -23,3 +23,7 @@ private_ssh_keys_dst_path: /home/centos/.ssh/id_rsa
 apply_patches: true
 patches_to_apply:
   - { 'src': 'patches/uuid.patch', 'basedir': '/opt/pulsar/venv/lib/python2.7/site-packages', 'state': 'present', 'backup': 'yes' }
+
+copy_plugins: false
+plugins_to_copy:
+  - {'src': '', 'dest': ''}

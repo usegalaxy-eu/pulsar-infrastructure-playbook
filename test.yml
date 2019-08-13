@@ -1,0 +1,13 @@
+---
+- name: Copy HTCondor test files
+  copy:
+    src: "{{ item.name }}"
+    dest: "{{ pulsar_data_path }}/{{ item.name }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    - {'name': test.job, 'mode': '0600'}
+    - {'name': test.sh, 'mode': '0700'}
+    - {'name': fio.job, 'mode': '0600'}
+    - {'name': fio.sh, 'mode': '0700'}
+    - {'name': iperf.job, 'mode': '0600'}
+    - {'name': iperf.sh, 'mode': '0700'}
