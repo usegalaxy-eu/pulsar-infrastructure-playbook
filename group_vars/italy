@@ -1,0 +1,7 @@
+apply_patches: true
+patches_to_apply:
+  - { 'src': 'patches/0005-tool_preparation_time.patch', 'basedir': '/opt/pulsar/venv/lib/python2.7/site-packages', 'state': 'present', 'backup': 'yes' }
+  - { 'src': 'patches/preprocessing_time-as-metadata.patch', 'basedir': '/opt/pulsar/venv/lib/python2.7/site-packages', 'state': 'present', 'backup': 'yes' }
+
+
+

@@ -1,0 +1,48 @@
+From 11aff019ab626903f64263c6de0a34301fff2663 Mon Sep 17 00:00:00 2001
+From: Andreas Skorczyk <me@andreas-sk.de>
+Date: Wed, 7 Aug 2019 19:51:25 +0200
+Subject: [PATCH 5/5] tool_preparation_time
+
+---
+ pulsar/managers/queued_condor.py | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/pulsar/managers/queued_condor.py b/pulsar/managers/queued_condor.py
+index 5fb7140..58e613f 100644
+--- a/pulsar/managers/queued_condor.py
++++ b/pulsar/managers/queued_condor.py
+@@ -7,6 +7,9 @@ from .base.external import ExternalBaseManager
+ from ..managers import status
+ 
+ from logging import getLogger
++
++import time
++
+ log = getLogger(__name__)
+ 
+ 
+@@ -27,6 +30,7 @@ class CondorQueueManager(ExternalBaseManager):
+         self.state_cache = {}
+ 
+     def launch(self, job_id, command_line, submit_params={}, dependencies_description=None, env=[], setup_params=None):
++        timing_start = time.time()
+         self._check_execution_with_tool_file(job_id, command_line)
+         job_file_path = self._setup_job_file(
+             job_id,
+@@ -46,6 +50,13 @@ class CondorQueueManager(ExternalBaseManager):
+         )
+         submit_file_contents = build_submit_description(**build_submit_params)
+         submit_file = self._write_job_file(job_id, "job.condor.submit", submit_file_contents)
++        tool_preparation_time = time.time() - timing_start
++
++        log.debug("Tool Preparation finished in %fs" % tool_preparation_time)
++        metadata_path = self._job_directory(job_id).metadata_directory()
++        with open(metadata_path + "/__instrument_staging_time_tool_preparation_time", "w+") as txt:
++            txt.write(str(tool_preparation_time))
++
+         external_id, message = condor_submit(submit_file)
+         if not external_id:
+             raise Exception(message)
+-- 
+2.17.1
+
