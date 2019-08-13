@@ -1,0 +1,7 @@
+---
+- name: Add cron to delete files older than 10 days
+  cron:
+    name: "delete old files"
+    minute: "21"
+    hour: "2"
+    job: "find {{ pulsar_data_path }}/staging/ -maxdepth 2 -mindepth 2 -type d -ctime +10 -exec rm -rf {} +"

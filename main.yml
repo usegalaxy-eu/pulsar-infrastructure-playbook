@@ -1,18 +1,37 @@
 - hosts: pulsarservers
 
+  handlers:
+    - name: restart pulsar
+      become: yes
+      service:
+        name: pulsar
+        enabled: yes
+        state: restarted
+
   tasks:
+    - name: import cron tasks
+      include_tasks: cron.yml
+
     - name: Copy job_metrics settings files
       copy:
         src: "{{ item.src }}"
         dest: "{{ item.dest }}"
       with_items:
-        - {src: "job_metrics_conf.xml", dest: "{{ pulsar_root_path }}/config/job_metrics_conf.xml"}
+        - {src: "{{ inventory_hostname }}/job_metrics_conf.xml", dest: "{{ pulsar_root_path }}/config/job_metrics_conf.xml"}
+      notify: restart pulsar
+
+    - name: copy staging_time metrics plugin
+      copy:
+        src: "staging_time.py"
+        dest: "/opt/pulsar/venv/lib/python2.7/site-packages/galaxy/jobs/metrics/instrumenters/staging_time.py"
+      when: inventory_hostname == 'it01.pulsar.galaxyproject.eu'
 
     - name: Copy Pulsar application configuration file
       template:
         src: "{{ inventory_hostname }}/app.yml.j2"
         dest: "{{ pulsar_root_path }}/config/app.yml"
         force: yes
+      notify: restart pulsar
 
     - name: Create container image cache path
       file:
@@ -36,7 +55,8 @@
         - {'name': test.sh, 'mode': '0700'}
         - {'name': fio.job, 'mode': '0600'}
         - {'name': fio.sh, 'mode': '0700'}
-
+        - {'name': iperf.job, 'mode': '0600'}
+        - {'name': iperf.sh, 'mode': '0700'}
 
     - name: Apply patch to multiple files under basedir
       patch:
@@ -47,10 +67,4 @@
         backup: "{{ item.backup }}"
       loop: "{{ patches_to_apply }}"
       when: apply_patches | bool
-
-    - name: Ensure pulsar service is enabled, and restart it
-      become: yes
-      service:
-        name: pulsar
-        enabled: yes
-        state: restarted
+      notify: restart pulsar
