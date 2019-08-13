@@ -5,5 +5,5 @@ it01.pulsar.galaxyproject.eu ansible_connection=ssh ansible_user=centos
 be01.pulsar.galaxyproject.eu ansible_connection=ssh ansible_user=centos ansible_port=59444
 pt01.pulsar.galaxyproject.eu ansible_connection=ssh ansible_user=centos
 
-[italy]
+[metrics]
 it01.pulsar.galaxyproject.eu ansible_connection=ssh ansible_user=centos
