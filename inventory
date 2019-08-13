@@ -6,4 +6,5 @@ be01.pulsar.galaxyproject.eu ansible_connection=ssh ansible_user=centos ansible_
 pt01.pulsar.galaxyproject.eu ansible_connection=ssh ansible_user=centos
 
 [metrics]
+de01.pulsar.galaxyproject.eu ansible_connection=ssh ansible_user=centos
 it01.pulsar.galaxyproject.eu ansible_connection=ssh ansible_user=centos
