@@ -15,8 +15,8 @@
     - name: import cron tasks
       include_tasks: cron.yml
 
-    - name: import test tasks
-      include_tasks: test.yml
+    - name: import scripts tasks
+      include_tasks: scripts.yml
 
     - name: import metrics tasks
       include_tasks: metrics.yml
