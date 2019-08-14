@@ -23,6 +23,9 @@ class StagingTimePlugin(InstrumentPlugin):
     def __init__(self, **kwargs):
         pass
 
+    def pre_execute_instrument(self, job_directory):
+        return "touch %s" % self._instrument_file_path(job_directory, "down_collection_time")
+
     def job_properties(self, job_id, job_directory):
         result = {}
 
@@ -30,6 +33,16 @@ class StagingTimePlugin(InstrumentPlugin):
         if os.path.isfile(preprocess_time_path):
             with open(preprocess_time_path) as f:
                 result["preprocessing_time"] = f.read()
+
+        tool_preparation_time_path = self._instrument_file_path(job_directory, "tool_preparation_time")
+        if os.path.isfile(tool_preparation_time_path):
+            with open(tool_preparation_time_path) as f:
+                result["tool_preparation_time"] = f.read()
+
+        collection_time_path = self._instrument_file_path(job_directory, "down_collection_time")
+        if os.path.isfile(collection_time_path):
+            with open(collection_time_path) as f:
+                result["down_collection_time"] = f.read()
 
         return result
 
