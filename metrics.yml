@@ -11,5 +11,5 @@
   copy:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
-  loop: "{{ plugins_to_copy }}"
-  when: copy_plugins | bool
+  loop: "{{ metrics_plugins_to_copy }}"
+  when: copy_metrics_plugins | bool
