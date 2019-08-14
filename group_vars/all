@@ -25,6 +25,7 @@ patches_to_apply:
   - { 'src': 'patches/uuid.patch', 'basedir': '/opt/pulsar/venv/lib/python2.7/site-packages', 'state': 'present', 'backup': 'yes' }
   - { 'src': 'patches/0005-tool_preparation_time.patch', 'basedir': '/opt/pulsar/venv/lib/python2.7/site-packages', 'state': 'present', 'backup': 'yes' }
   - { 'src': 'patches/preprocessing_time-as-metadata.patch', 'basedir': '/opt/pulsar/venv/lib/python2.7/site-packages', 'state': 'present', 'backup': 'yes' }
+  - { 'src': 'patches/97e48dbea993311b35aadb32b7a1a1b32b9a56f2.patch', 'basedir': '/opt/pulsar/venv/lib/python2.7/site-packages', 'state': 'present', 'backup': 'yes' }
 
 copy_metrics_plugins: true
 metrics_plugins_to_copy:

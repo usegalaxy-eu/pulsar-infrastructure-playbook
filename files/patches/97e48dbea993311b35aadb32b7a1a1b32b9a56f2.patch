@@ -1,0 +1,41 @@
+From 97e48dbea993311b35aadb32b7a1a1b32b9a56f2 Mon Sep 17 00:00:00 2001
+From: Andreas Skorczyk <me@andreas-sk.de>
+Date: Wed, 14 Aug 2019 10:53:39 +0200
+Subject: [PATCH] Measure time for collection of files back to Galaxy
+
+---
+ pulsar/client/staging/down.py | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/pulsar/client/staging/down.py b/pulsar/client/staging/down.py
+index 8bd9400..d1ebf50 100644
+--- a/pulsar/client/staging/down.py
++++ b/pulsar/client/staging/down.py
+@@ -6,6 +6,7 @@
+ from ..action_mapper import FileActionMapper
+ from ..staging import COMMAND_VERSION_FILENAME
+ 
++import time
+ 
+ log = getLogger(__name__)
+ 
+@@ -61,10 +62,19 @@ def __init__(self, output_collector, action_mapper, client_outputs, pulsar_outpu
+         self.metadata_directory_contents = pulsar_outputs.metadata_directory_contents or []
+ 
+     def collect(self):
++        timing_start = time.time()
+         self.__collect_working_directory_outputs()
+         self.__collect_outputs()
+         self.__collect_version_file()
+         self.__collect_other_working_directory_files()
++
++        collect_time = time.time() - timing_start
++        log.debug("Collection complete in %f seconds." % collect_time)
++        collection_time_path = self.output_collector.job_directory.metadata_directory() \
++                                + "/__instrument_staging_time_down_collection_time"
++        with open(collection_time_path, "w+") as txt:
++            txt.write(str(collect_time))
++
+         self.__collect_metadata_directory_files()
+         return self.exception_tracker.collection_failure_exceptions
+ 
