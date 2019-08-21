@@ -11,4 +11,4 @@
     name: "delete unsuccessful directories"
     minute: "21"
     hour: "3"
-    job: "find {{ pulsar_data_path }}/staging/ -maxdepth 2 -mindepth 2 -type d -ctime +10 -exec rm -rf {} +"
+    job: "find {{ pulsar_data_path }}/staging/ -maxdepth 1 -mindepth 1 -type d -ctime +10 -exec rm -rf {} +"
