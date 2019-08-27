@@ -12,8 +12,6 @@
   <!-- Each element in this file corresponds to a job instrumentation plugin
        used to generate metrics in lib/galaxy/jobs/metrics/instrumenters. -->
 
-  <staging_time />
-
   <!-- Core plugin captures Galaxy slots, start and end of job (in seconds
        since epoch) and computes runtime in seconds. -->
   <core />
