@@ -12,21 +12,21 @@
   <!-- Each element in this file corresponds to a job instrumentation plugin
        used to generate metrics in lib/galaxy/jobs/metrics/instrumenters. -->
 
-  <staging_time />
+<!--  <staging_time />-->
 
   <!-- Core plugin captures Galaxy slots, start and end of job (in seconds
        since epoch) and computes runtime in seconds. -->
   <core />
 
   <!-- Uncomment to dump processor count for each job - linux only. -->
-  <cpuinfo />
+<!--  <cpuinfo />-->
   <!-- Uncomment to dump information about all processors for for each
        job - this is likely too much data. Linux only. -->
   <!-- <cpuinfo verbose="true" /> -->
 
   <!-- Uncomment to dump system memory information for each job - linux
        only. -->
-  <meminfo />
+<!--  <meminfo />-->
 
   <!-- Uncomment to record operating system each job is executed on - linux
        only. -->
