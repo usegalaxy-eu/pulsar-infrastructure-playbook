@@ -2,7 +2,7 @@ pulsar_root_path: /opt/pulsar
 pulsar_data_path: /data/share
 pulsar_container_image_cache_path: "{{ pulsar_data_path }}/var/database/container_cache"
 
-private_ssh_keys_src_path: /home/gmauro/.ssh/cloud_bw.key
+private_ssh_keys_src_path: /home/gmauro/.ssh/cloud2_bw.key
 private_ssh_keys_dst_path: /home/centos/.ssh/id_rsa
 
 # This is just a pro memoria
@@ -23,6 +23,7 @@ private_ssh_keys_dst_path: /home/centos/.ssh/id_rsa
 apply_patches: true
 patches_to_apply:
   - { 'src': 'patches/uuid.patch', 'basedir': '/opt/pulsar/venv/lib/python2.7/site-packages', 'state': 'present', 'backup': 'yes' }
+  - { 'src': 'patches/params_submission.patch', 'basedir': '/opt/pulsar/venv/lib/python2.7/site-packages', 'state': 'present', 'backup': 'yes' }
   - { 'src': 'patches/0005-tool_preparation_time.patch', 'basedir': '/opt/pulsar/venv/lib/python2.7/site-packages', 'state': 'present', 'backup': 'yes' }
   - { 'src': 'patches/preprocessing_time-as-metadata.patch', 'basedir': '/opt/pulsar/venv/lib/python2.7/site-packages', 'state': 'present', 'backup': 'yes' }
   - { 'src': 'patches/97e48dbea993311b35aadb32b7a1a1b32b9a56f2.patch', 'basedir': '/opt/pulsar/venv/lib/python2.7/site-packages', 'state': 'present', 'backup': 'yes' }

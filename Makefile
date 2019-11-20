@@ -5,7 +5,7 @@ help:
 	@echo "  check                    don't make any changes; try to predict some of the changes that may occur"
 	@echo "  apply                    configure remote Pulsar servers"
 
-check:
+check: install_roles
 	ansible-playbook -C -i inventory main.yml
 
 apply:
@@ -13,3 +13,12 @@ apply:
 
 get_job_metrics:
 	wget -O files/job_metrics_conf.xml ${REMOTE_JMC_FILE}
+
+pulsar: install_roles
+	ansible-playbook -i inventory pulsar.yml
+
+install_roles:
+	ansible-galaxy install -p roles -r requirements.yml
+
+clean:
+	rm -rf roles

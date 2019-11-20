@@ -1,0 +1,35 @@
+---
+ galaxy/job_metrics/instrumenters/cgroup.py   | 4 ++--
+ galaxy/job_metrics/instrumenters/hostname.py | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/galaxy/job_metrics/instrumenters/cgroup.py b/galaxy/job_metrics/instrumenters/cgroup.py
+index 00374c086da..727c1f96885 100644
+--- a/galaxy/job_metrics/instrumenters/cgroup.py
++++ b/galaxy/job_metrics/instrumenters/cgroup.py
+@@ -72,10 +72,10 @@ def job_properties(self, job_id, job_directory):
+         return metrics
+ 
+     def __record_cgroup_cpu_usage(self, job_directory):
+-        return """if [ `command -v cgget` ] && [ -e /proc/$$/cgroup ]; then cat /proc/$$/cgroup | awk -F':' '$2=="cpuacct,cpu"{print $2":"$3}' | xargs -I{} cgget -g {} > %(metrics)s ; else echo "" > %(metrics)s; fi""" % {"metrics": self.__cgroup_metrics_file(job_directory)}
++        return """if [ `command -v cgget` ] && [ -e /proc/$$/cgroup ]; then cat /proc/$$/cgroup | awk -F':' '$2=="cpuacct,cpu"{print $2":"$3}' | xargs -I{} cgget -g {} >> %(metrics)s ; else echo "" >> %(metrics)s; fi""" % {"metrics": self.__cgroup_metrics_file(job_directory)}
+ 
+     def __record_cgroup_memory_usage(self, job_directory):
+-        return """if [ `command -v cgget` ] && [ -e /proc/$$/cgroup ]; then cat /proc/$$/cgroup | awk -F':' '$2=="memory"{print $2":"$3}' | xargs -I{} cgget -g {} >> %(metrics)s ; else echo "" > %(metrics)s; fi""" % {"metrics": self.__cgroup_metrics_file(job_directory)}
++        return """if [ `command -v cgget` ] && [ -e /proc/$$/cgroup ]; then cat /proc/$$/cgroup | awk -F':' '$2=="memory"{print $2":"$3}' | xargs -I{} cgget -g {} >> %(metrics)s ; else echo "" >> %(metrics)s; fi""" % {"metrics": self.__cgroup_metrics_file(job_directory)}
+ 
+     def __cgroup_metrics_file(self, job_directory):
+         return self._instrument_file_path(job_directory, "_metrics")
+diff --git a/galaxy/job_metrics/instrumenters/hostname.py b/galaxy/job_metrics/instrumenters/hostname.py
+index 35694b36b06..79df14195c6 100644
+--- a/galaxy/job_metrics/instrumenters/hostname.py
++++ b/galaxy/job_metrics/instrumenters/hostname.py
+@@ -23,7 +23,7 @@ def __init__(self, **kwargs):
+         pass
+ 
+     def pre_execute_instrument(self, job_directory):
+-        return "hostname -f > '%s'" % self.__instrument_hostname_path(job_directory)
++        return "echo $(hostname -f) > '%s'" % self.__instrument_hostname_path(job_directory)
+ 
+     def job_properties(self, job_id, job_directory):
+         with open(self.__instrument_hostname_path(job_directory)) as f:

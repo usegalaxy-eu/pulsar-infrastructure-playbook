@@ -1,0 +1,29 @@
+From d1980e3679b62cc58200be6be654ff3ceeb38712 Mon Sep 17 00:00:00 2001
+From: Gianmauro Cuccuru <gmauro@gmail.com>
+Date: Thu, 5 Sep 2019 14:35:47 +0200
+Subject: [PATCH] fix parameters submission
+
+---
+ pulsar/managers/queued_condor.py | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/pulsar/managers/queued_condor.py b/pulsar/managers/queued_condor.py
+index 5fb7140..1dd5141 100644
+--- a/pulsar/managers/queued_condor.py
++++ b/pulsar/managers/queued_condor.py
+@@ -37,12 +37,14 @@ def launch(self, job_id, command_line, submit_params={}, dependencies_descriptio
+         )
+         log_path = self.__condor_user_log(job_id)
+         open(log_path, 'w')  # Touch log file
++
++        submit_params.update(self.submission_params)
+         build_submit_params = dict(
+             executable=job_file_path,
+             output=self._stdout_path(job_id),
+             error=self._stderr_path(job_id),
+             user_log=log_path,
+-            query_params=self.submission_params,
++            query_params=submit_params,
+         )
+         submit_file_contents = build_submit_description(**build_submit_params)
+         submit_file = self._write_job_file(job_id, "job.condor.submit", submit_file_contents)
