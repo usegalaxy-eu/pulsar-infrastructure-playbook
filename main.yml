@@ -9,9 +9,6 @@
         state: restarted
 
   tasks:
-    - name: import keys task
-      include_tasks: keys.yml
-
     - name: import cron tasks
       include_tasks: cron.yml
 
@@ -32,6 +29,7 @@
         src: "{{ inventory_hostname }}/app.yml.j2"
         dest: "{{ pulsar_root_path }}/config/app.yml"
         force: yes
+        backup: yes
       notify: restart pulsar
 
     - name: Apply patch to multiple files under basedir
@@ -44,3 +42,4 @@
       loop: "{{ patches_to_apply }}"
       when: apply_patches | bool
       notify: restart pulsar
+      ignore_errors: yes
