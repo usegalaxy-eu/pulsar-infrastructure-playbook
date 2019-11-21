@@ -1,4 +1,4 @@
-REMOTE_JMC_FILE=https://github.com/usegalaxy-eu/infrastructure-playbook/blob/master/files/galaxy/config/job_metrics_conf.xml
+REMOTE_JMC_FILE=https://raw.githubusercontent.com/usegalaxy-eu/infrastructure-playbook/master/files/galaxy/config/job_metrics_conf.xml
 
 help:
 	@echo "Please use \`make <target>\` where <target> is one of"
