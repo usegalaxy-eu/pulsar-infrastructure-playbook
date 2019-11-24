@@ -2,32 +2,12 @@ pulsar_root_path: /opt/pulsar
 pulsar_data_path: /data/share
 pulsar_container_image_cache_path: "{{ pulsar_data_path }}/var/database/container_cache"
 
-private_ssh_keys_src_path: /home/gmauro/.ssh/cloud2_bw.key
-private_ssh_keys_dst_path: /home/centos/.ssh/id_rsa
-
-# This is just a pro memoria
-#patches:
-#  01:
-#    name: "divide the command_line into two different script files"
-#    url: https://github.com/gmauro/pulsar/commit/4c0e819dc7db33e72455b17d0801156f90aa75e1.patch
-#    path: patches/4c0e819dc7db33e72455b17d0801156f90aa75e1.patch
-#  02:
-#    name: "enable uuid job_id with Pulsar over Message Queue"
-#    url: https://patch-diff.githubusercontent.com/raw/galaxyproject/pulsar/pull/196.patch
-#    path: patches/uuid.patch
-#  03:
-#    name: "tool_preparation_time"
-#    url: https://github.com/AndreasSko/pulsar/commit/11aff019ab626903f64263c6de0a34301fff2663.patch
-#    path: patches/11aff019ab626903f64263c6de0a34301fff2663.patch
-
 apply_patches: true
 patches_to_apply:
   - { 'src': 'patches/uuid.patch', 'basedir': '/opt/pulsar/venv/lib/python2.7/site-packages', 'state': 'present', 'backup': 'yes' }
   - { 'src': 'patches/params_submission.patch', 'basedir': '/opt/pulsar/venv/lib/python2.7/site-packages', 'state': 'present', 'backup': 'yes' }
-  - { 'src': 'patches/0005-tool_preparation_time.patch', 'basedir': '/opt/pulsar/venv/lib/python2.7/site-packages', 'state': 'present', 'backup': 'yes' }
-  - { 'src': 'patches/preprocessing_time-as-metadata.patch', 'basedir': '/opt/pulsar/venv/lib/python2.7/site-packages', 'state': 'present', 'backup': 'yes' }
-  - { 'src': 'patches/97e48dbea993311b35aadb32b7a1a1b32b9a56f2.patch', 'basedir': '/opt/pulsar/venv/lib/python2.7/site-packages', 'state': 'present', 'backup': 'yes' }
+  - { 'src': 'patches/hostname.patch', 'basedir': '/opt/pulsar/venv/lib/python2.7/site-packages', 'state': 'present', 'backup': 'yes' }
 
-copy_metrics_plugins: true
+copy_metrics_plugins: false
 metrics_plugins_to_copy:
   - {'src': 'staging_time.py', 'dest': '/opt/pulsar/venv/lib/python2.7/site-packages/galaxy/jobs/metrics/instrumenters/staging_time.py'}
