@@ -12,3 +12,10 @@
     minute: "21"
     hour: "3"
     job: "find {{ pulsar_data_path }}/staging/ -maxdepth 1 -mindepth 1 -type d -ctime +10 -exec rm -rf {} +"
+
+- name: Add cron to restart pulsar
+  cron:
+    name: "restart Pulsar to take care of RabbitMQ shutdown issue"
+    minute: "11"
+    hour: "6"
+    job: "sudo systemctl restart pulsar"
