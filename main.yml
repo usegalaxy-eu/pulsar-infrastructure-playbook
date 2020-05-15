@@ -9,6 +9,9 @@
         state: restarted
 
   tasks:
+    - name: import ssh tasks
+      include_tasks: ssh.yml
+
     - name: import cron tasks
       include_tasks: cron.yml
 

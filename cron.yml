@@ -26,6 +26,7 @@
     src: update-hosts.sh.j2
     dest: /usr/bin/update-hosts
     mode: 0744
+
 - name: Creates a cron file under /etc/cron.d
   become: yes
   cron:

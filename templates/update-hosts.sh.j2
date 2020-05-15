@@ -5,7 +5,7 @@ cat /etc/hosts| grep -v '^{{ private_network_prefix }}' > $tmp
 
 condor_status -autoformat Machine MyAddress | \
     cut -f1 -d: | \
-    sed 's/<//g;s/{{ suffix_name }}//g'| \
+    sed 's/<//g;s/{{ name_suffix }}//g'| \
     awk '{print $2" "$1}'| \
     sort -uk2 >> $tmp
 

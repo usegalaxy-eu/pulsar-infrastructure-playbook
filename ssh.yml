@@ -1,0 +1,21 @@
+---
+- name: create (if it does not exist) ~/.ssh directory
+  file:
+    path: /home/centos/.ssh
+    state: directory
+    mode: '0700'
+
+- name: create (if it does not exist) ~/.ssh/config file
+  file:
+    path: /home/centos/.ssh/config
+    state: touch
+    mode: '0644'
+
+- name: append ssh configuration
+  blockinfile:
+    path: /home/centos/.ssh/config
+    block: |
+      Host {{ name_prefix }}*
+         StrictHostKeyChecking no
+         UserKnownHostsFile=/dev/null
+         LogLevel QUIET
