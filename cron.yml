@@ -32,5 +32,5 @@
     name: update hosts
     special_time: hourly
     user: root
-    job: "/usr/bin/update_hosts"
+    job: "/usr/bin/update-hosts"
     cron_file: ansible_update_hosts
