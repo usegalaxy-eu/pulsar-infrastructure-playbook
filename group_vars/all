@@ -11,3 +11,8 @@ patches_to_apply:
 copy_metrics_plugins: false
 metrics_plugins_to_copy:
   - {'src': 'staging_time.py', 'dest': '/opt/pulsar/venv/lib/python2.7/site-packages/galaxy/jobs/metrics/instrumenters/staging_time.py'}
+
+# Update hosts script
+private_network_prefix: "192.168.199"
+suffix_name: ".pulsar.novalocal"
+workers_group_name: "workers"

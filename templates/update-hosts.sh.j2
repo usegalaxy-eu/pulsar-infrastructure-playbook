@@ -1,0 +1,17 @@
+#!/bin/bash
+tmp=`mktemp`
+
+cat /etc/hosts| grep -v '^{{ private_network_prefix }}' > $tmp
+
+condor_status -autoformat Machine MyAddress | \
+    cut -f1 -d: | \
+    sed 's/<//g;s/{{ suffix_name }}//g'| \
+    awk '{print $2" "$1}'| \
+    sort -uk2 >> $tmp
+
+# Fix permissions
+chmod 644 $tmp
+# Replace our hosts
+mv $tmp /etc/hosts
+
+echo "$(cat /etc/hosts | grep {{ private_network_prefix }} | awk '{print $2}' | paste -s -d,) {{ workers_group_name }}" > /etc/genders
