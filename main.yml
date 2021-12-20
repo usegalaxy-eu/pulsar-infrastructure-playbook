@@ -46,3 +46,10 @@
       when: apply_patches | bool
       notify: restart pulsar
       ignore_errors: yes
+    - name: Change file ownership and group for persisted_data folder
+      file: 
+        path: "{{ pulsar_data_path }}/persisted_data"
+        state: directory
+        recurse: yes
+        owner: pulsar
+        group: pulsar
